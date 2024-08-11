@@ -1,0 +1,21 @@
+---
+
+- name: Extract vlan_id info and generate a comma-separated string
+  hosts: localhost
+
+  tasks:
+    - name: Load VLANs from YAML file
+      set_fact:
+        item: "{{ lookup('file', 'vars/allowed_vlans.yml') | from_yaml }}"
+
+    - name: Extract vlan_id where native is false
+      set_fact:
+        allowed_vlans: "{{ item.interfaces[0].details.vlans | selectattr('native', 'equalto', false) | map(attribute='vlan_id') | list }}"
+
+    - name: Generate comma-separated range of vlan_ids
+      set_fact:
+        allowed_vlans_range: "{{ allowed_vlans | join(',') }}"
+
+    - name: Display the comma-separated string
+      debug:
+        msg: "switchport trunk allowed vlans {{ allowed_vlans_range }}"
