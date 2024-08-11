@@ -1,0 +1,17 @@
+{% for item in eth.interfaces %}
+interface {{ item.name }} {{ item.details.port }}
+ description {{ item.details.description }}
+{% if item.details.ip_mtu is defined and item.details.ip_mtu | int != 1500 %}
+ mtu {{ item.details.ip_mtu }}
+{% endif %}
+{% if item.details.speed_config is defined and item.details.speed_config %}
+ speed {{ item.details.speed_config }}
+{% endif %}
+{% if item.details.switched_type == "switched" %}
+{% if item.details.shutdown is defined and item.details.shutdown %}
+ shutdown
+{% endif %}
+{% endif %}
+!
+{% endfor %}
+

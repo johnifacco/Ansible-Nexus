@@ -1,9 +1,48 @@
 ---
+- hosts: localhost
+  gather_facts: no
+  connection: local
 
-- name: Extract vlan_id info and generate a comma-separated string
-  hosts: localhost
+  # vars:
+  #   eth:
+  #     interfaces:
+  #       - name: "Ethernet"
+  #         interface_type: "switched"
+  #         switched_type: trunk
+  #         secure_zone: null
+  #         details:
+  #           port: "1/1"
+  #           description: "This is a switched trunk port"
+  #           ip_mtu: 9100
+  #           mtu: null
+  #           switched_type: trunk
+  #           channel_group: 
+  #             group_number: 400
+  #             mode: "active"
+  #           vlans:
+  #             - native: true
+  #               vlan_id: 1
+  #             - native: false
+  #               vlan_id: 10
+  #             - native: false
+  #               vlan_id: 20
+
+########################## Play 1 ###############################
+
+  # tasks:
+  #   - name: "100 Generate template for trunk port"
+  #     set_fact:
+  #       trunk_config: "{{ lookup('template', 'templates/int_eth.j2') }}"
+
+  #   - name: "110 Display trunk port configuration string"
+  #     debug:
+  #       msg: "{{ trunk_config }}"
+
+
+########################## Play 2 ###############################
 
   tasks:
+
     - name: Load VLANs from YAML file
       set_fact:
         item: "{{ lookup('file', 'vars/allowed_vlans.yml') | from_yaml }}"
